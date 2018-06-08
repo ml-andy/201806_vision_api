@@ -1,14 +1,14 @@
 <template>
-  <el-container class="page">
+  <section class="page">
     <h1>UPLOAD YOUR PHOTOS</h1>
-    <header class="page__header" v-loading="isFetchItem">
+    <header class="page__header">
       <input id="uploadFile" class="page-header__input" @change="onChange" type="file">
       <label :class="['page-header__tips', hasUpload ? 'upload' : '']" for="uploadFile">
         <el-button class="page-header__tipsbtn" v-if="!hasUpload" type="primary">
           upload
           <i class="el-icon-upload el-icon--right"></i>
         </el-button>
-        <div class="page-header__photo" v-if="hasUpload">
+        <div class="page-header__photo" v-loading="isFetchItem" v-if="hasUpload">
           <img :src="userPhotoBase64">
         </div>
       </label>
@@ -18,10 +18,11 @@
         START
         <i class="el-icon-refresh el-icon--right"></i>
       </el-button>
-      <span class="item-name" v-if="hasVision">NAME: {{ item.name }}</span>
+      <span class="item-title" v-if="hasVision">NAME</span>
+      <span class="item-name" v-if="hasVision">{{ item.name }}</span>
     </el-main>
-    <el-footer class="footer">Copyright © 慧如許願池</el-footer>
-  </el-container>
+    <!-- <el-footer class="footer">Copyright © 慧如許願池</el-footer> -->
+  </section>
 </template>
 
 <script>
@@ -86,11 +87,12 @@ export default {
           this.hasVision = true;
           this.item.name = res.data.responses[0].webDetection.bestGuessLabels[0].label;
           console.log(this.item.name);
+          this.isFetchItem = false;
         })
         .catch((error) => {
           console.log(error);
+          this.isFetchItem = false;
         });
-      this.isFetchItem = false;
     },
   },
   watch: {
@@ -156,9 +158,15 @@ h1{
   height: auto;
 }
 
+.item-title{
+  width: 100%;
+  margin-top: 2vw;
+  display: block;
+  color: #C0C4CC;
+}
+
 .item-name{
   width: 100%;
-  margin: 2vw 0;
   display: block;
   color: #fff;
 }
@@ -171,6 +179,10 @@ h1{
 }
 
 @media screen and (max-width: 980px) {
+  h1{
+    font-size: 6vw;
+  }
+
   .page {
     width: 90%;
     margin: 0 5%;
@@ -183,11 +195,23 @@ h1{
     min-height: 10vw;
   }
 
+  .item-title{
+    width: 100%;
+    margin-top: 8vw;
+    display: block;
+    font-size: 4vw;
+    color: #C0C4CC;
+  }
+
   .item-name{
     width: 100%;
-    margin: 10vw 0;
     display: block;
     color: #fff;
+    font-size: 8vw;
+  }
+
+  .footer{
+    font-size: 4vw;
   }
 }
 
